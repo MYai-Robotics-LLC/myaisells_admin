@@ -67,10 +67,11 @@ export const businessesApi = baseApi.injectEndpoints({
       invalidatesTags: ['Business'],
     }),
 
-    businessSupportAccess: builder.mutation<BusinessSupportAccessResponse, string>({
-      query: id => ({
+    businessSupportAccess: builder.mutation<BusinessSupportAccessResponse, { id: string; reason: string }>({
+      query: ({ id, reason }) => ({
         url: `${baseUrl}/businesses/${id}/support-access`,
         method: 'POST',
+        body: { reason },
       }),
       invalidatesTags: ['Business'],
     }),

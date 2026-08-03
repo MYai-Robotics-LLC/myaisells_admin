@@ -27,6 +27,7 @@ import {
   FiUsers,
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { ConfirmReasonModal, useConfirmReasonAction } from '@/components/global/confirm-reason-modal';
 import {
   useAssignPartnerLocationMutation,
   useDeletePartnerMutation,
@@ -310,16 +311,16 @@ function DetailSidebar({ partner, onDeleted }: { partner: Partner; onDeleted: ()
   const [showLocation, setShowLocation] = useState(false);
   const [showTransfer, setShowTransfer] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [supportAccess, { isLoading: isEnteringSupport }] = usePartnerSupportAccessMutation();
+  const [supportAccess] = usePartnerSupportAccessMutation();
 
-  const handleSupportAccess = async () => {
-    try {
-      await supportAccess(partner.id).unwrap();
-      toast.success('Support mode entered. This access has been audit-logged');
-    } catch {
-      toast.error('Failed to enter support mode');
-    }
-  };
+  // PRD §6.6 / §15.3: support-mode access is a restricted action requiring
+  // confirmation and a logged reason before the session opens.
+  const supportAccessAction = useConfirmReasonAction(
+    async (reason) => {
+      await supportAccess({ id: partner.id, reason }).unwrap();
+    },
+    { success: 'Support mode entered. This access has been audit-logged', error: 'Failed to enter support mode' },
+  );
 
   const initials = `${partner.first_name.charAt(0)}${partner.last_name.charAt(0)}`.toUpperCase();
   const fullName = `${partner.first_name} ${partner.last_name}`;
@@ -382,12 +383,11 @@ function DetailSidebar({ partner, onDeleted }: { partner: Partner; onDeleted: ()
           </button>
           <button
             type="button"
-            onClick={handleSupportAccess}
-            disabled={isEnteringSupport}
+            onClick={supportAccessAction.open}
             className="col-span-2 flex items-center justify-center gap-2 rounded-xl border border-primary-200 bg-primary-50 px-4 py-2.5 text-sm font-semibold text-primary-700 transition-all hover:bg-primary-100 disabled:opacity-50"
           >
             <FiHeadphones className="h-4 w-4" />
-            {isEnteringSupport ? 'Entering…' : 'Enter Support Mode'}
+            Enter Support Mode
           </button>
           <button type="button" onClick={() => setShowDelete(true)} className="col-span-2 flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-600 transition-all hover:bg-red-100">
             <FiTrash2 className="h-4 w-4" />
@@ -401,6 +401,17 @@ function DetailSidebar({ partner, onDeleted }: { partner: Partner; onDeleted: ()
       <LocationModal partner={partner} open={showLocation} onClose={() => setShowLocation(false)} />
       <TransferOwnershipModal partner={partner} open={showTransfer} onClose={() => setShowTransfer(false)} />
       <DeletePartnerModal partner={partner} open={showDelete} onClose={() => setShowDelete(false)} onDeleted={onDeleted} />
+      <ConfirmReasonModal
+        open={supportAccessAction.isOpen}
+        title={`Enter support mode for ${fullName}?`}
+        description="You'll be acting on behalf of this partner. All actions taken in support mode are recorded against this session."
+        confirmLabel="Enter Support Mode"
+        confirmingLabel="Entering…"
+        variant="default"
+        isLoading={supportAccessAction.isLoading}
+        onClose={supportAccessAction.close}
+        onConfirm={supportAccessAction.confirm}
+      />
     </div>
   );
 }
@@ -706,8 +717,7 @@ export default function PartnerDetail({ partnerId }: PartnerDetailProps) {
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
-                className={`flex-1 rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
-                  tab === t.id ? 'bg-white text-primary-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                className={`flex-1 rounded-lg px-2 py-2 text-xs font-semibold transition-all ${tab === t.id ? 'bg-white text-primary-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {t.label}
