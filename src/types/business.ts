@@ -121,8 +121,9 @@ export interface CreateBusinessRequest {
   state?: string;
   address?: string;
   industry?: string;
-  contact_person?: string;
+  contact_person: string;
   subscription_plan?: string;
+  business_sector_id: number;
 }
 
 export interface CreateBusinessOnboardingData {
