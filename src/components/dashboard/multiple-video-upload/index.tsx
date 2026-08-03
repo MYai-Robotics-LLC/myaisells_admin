@@ -1,7 +1,6 @@
 'use client';
 
 import type { FileAsset, VideoUploadForm, VideoUploadFormWithUrls } from '@/types';
-import { randomUUID } from 'node:crypto';
 import { Button } from '@myairobotics/ui';
 import { useState } from 'react';
 import { PiPlus, PiUploadSimple } from 'react-icons/pi';
@@ -116,7 +115,7 @@ export default function MultipleVideoUpload() {
   const handleAddItem = () => {
     setUploads(prev => [
       ...prev,
-      { ...NEW_UPLOAD_ITEM_DEFAULT, id: randomUUID() },
+      { ...NEW_UPLOAD_ITEM_DEFAULT, id: crypto.randomUUID() },
     ]);
   };
 
