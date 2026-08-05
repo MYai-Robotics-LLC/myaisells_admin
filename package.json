@@ -5,6 +5,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "bootstrap": "bash scripts/install.sh",
     "dev": "next dev",
     "spotlight": "npx @spotlightjs/spotlight",
     "dev:spotlight": "pnpm run -r run-p dev spotlight",
