@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, EmptyState, StatCardSkeleton, StatCard as UiStatCard } from '@myairobotics/ui';
+import { Badge, EmptyState, StatCardSkeleton, StatCard as UiStatCard } from '@myai-robotics-llc/ui';
 import {
   FiActivity,
   FiAlertTriangle,

@@ -1,7 +1,7 @@
 'use client';
 
 import type { AuditLog, AuditLogsFilters } from '@/types';
-import { Badge, DatePicker, EmptyState, FormField, Loader, PageHeader, Pagination, SearchInput, SidePanel, TableRowSkeleton } from '@myairobotics/ui';
+import { Badge, DatePicker, EmptyState, FormField, Loader, PageHeader, Pagination, SearchInput, SidePanel, TableRowSkeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiActivity,

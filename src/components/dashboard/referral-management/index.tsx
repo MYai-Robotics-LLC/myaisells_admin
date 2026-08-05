@@ -1,7 +1,7 @@
 'use client';
 
 import type { AttributionSource, ReferredUser } from '@/types';
-import { Badge, EmptyState, FormField, Modal, PageHeader, Pagination, StatCard, TableRowSkeleton } from '@myairobotics/ui';
+import { Badge, EmptyState, FormField, Modal, PageHeader, Pagination, StatCard, TableRowSkeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiArrowRight,

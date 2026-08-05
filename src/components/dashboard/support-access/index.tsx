@@ -1,7 +1,7 @@
 'use client';
 
 import type { SupportSession, SupportSessionStatus } from '@/types';
-import { Badge, EmptyState, FilterPills, PageHeader, Pagination, SearchFilterBar, SidePanel, StatCard, TableRowSkeleton } from '@myairobotics/ui';
+import { Badge, EmptyState, FilterPills, PageHeader, Pagination, SearchFilterBar, SidePanel, StatCard, TableRowSkeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiAlertCircle,

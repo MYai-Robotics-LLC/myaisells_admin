@@ -1,6 +1,6 @@
 'use client';
 
-import { FormField, Modal } from '@myairobotics/ui';
+import { FormField, Modal } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';

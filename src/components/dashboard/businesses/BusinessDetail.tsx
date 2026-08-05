@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, InfoField, SectionDivider, Skeleton } from '@myairobotics/ui';
+import { Badge, InfoField, SectionDivider, Skeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiBriefcase,

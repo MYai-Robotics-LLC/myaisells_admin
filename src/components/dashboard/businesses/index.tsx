@@ -12,7 +12,7 @@ import {
   SearchFilterBar,
   StatCard,
   TableRowSkeleton,
-} from '@myairobotics/ui';
+} from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {

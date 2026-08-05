@@ -1,7 +1,7 @@
 'use client';
 
 import type { Permission, Role } from '@/types';
-import { Badge, FormField, PageHeader, Skeleton } from '@myairobotics/ui';
+import { Badge, FormField, PageHeader, Skeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {

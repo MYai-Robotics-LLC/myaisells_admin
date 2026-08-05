@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, EmptyState, FormField, Modal, SidePanel, Skeleton } from '@myairobotics/ui';
+import { Badge, EmptyState, FormField, Modal, SidePanel, Skeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {

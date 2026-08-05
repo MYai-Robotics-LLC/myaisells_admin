@@ -1,7 +1,7 @@
 'use client';
 
 import type { HowToItem } from '@/types';
-import { EmptyState, PageHeader, Pagination } from '@myairobotics/ui';
+import { EmptyState, PageHeader, Pagination } from '@myai-robotics-llc/ui';
 import Link from 'next/link';
 import { useState } from 'react';
 import {

@@ -1,6 +1,6 @@
 'use client';
 
-import { EmptyState, SectionDivider, StatCard, StatCardSkeleton } from '@myairobotics/ui';
+import { EmptyState, SectionDivider, StatCard, StatCardSkeleton } from '@myai-robotics-llc/ui';
 import {
   FiActivity,
   FiBriefcase,

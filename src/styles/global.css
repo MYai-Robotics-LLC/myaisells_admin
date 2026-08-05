@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-@import '@myairobotics/ui/theme.css';
-@source '../../node_modules/@myairobotics/ui/dist';
+@import '@myai-robotics-llc/ui/theme.css';
+@source '../../node_modules/@myai-robotics-llc/ui/dist';
 
 @layer base {
   body {

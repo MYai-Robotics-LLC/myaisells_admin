@@ -1,7 +1,7 @@
 'use client';
 
 import type { PlatformConfig, SubscriptionPlan } from '@/types';
-import { Badge, PageHeader } from '@myairobotics/ui';
+import { Badge, PageHeader } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiCheck,

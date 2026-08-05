@@ -1,7 +1,7 @@
 'use client';
 
 import type { Partner, PartnerStatus } from '@/types';
-import { Badge, EmptyState, FormField, InfoField, Modal, PageHeader, Pagination, SectionDivider, Skeleton, StatCard } from '@myairobotics/ui';
+import { Badge, EmptyState, FormField, InfoField, Modal, PageHeader, Pagination, SectionDivider, Skeleton, StatCard } from '@myai-robotics-llc/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

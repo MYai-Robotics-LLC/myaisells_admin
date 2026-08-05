@@ -1,7 +1,7 @@
 'use client';
 
 import type { AnalyticsDataPoint, AnalyticsPeriod } from '@/types';
-import { PageHeader } from '@myairobotics/ui';
+import { PageHeader } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiActivity,
