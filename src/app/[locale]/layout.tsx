@@ -44,14 +44,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(Env.NEXT_PUBLIC_APP_URL || 'https://admin.myaisells.com'),
   title: 'Xynexi - Human-AI',
   description:
-    'MYai is an advanced AI-powered platform designed to simplify complex tasks, enhance productivity, and provide intelligent solutions.',
-  keywords: ['AI', 'Productivity', 'Automation', 'MYai'],
+    'Xynexi is an advanced AI-powered platform designed to simplify complex tasks, enhance productivity, and provide intelligent solutions.',
+  keywords: ['AI', 'Productivity', 'Automation', 'Xynexi'],
   authors: [{ name: 'VinJex' }],
   manifest: '/site.webmanifest',
   openGraph: {
     title: 'Xynexi - Human-AI',
     description:
-      'MYai is an advanced AI-powered platform designed to simplify complex tasks, enhance productivity, and provide intelligent solutions.',
+      'Xynexi is an advanced AI-powered platform designed to simplify complex tasks, enhance productivity, and provide intelligent solutions.',
     url: Env.NEXT_PUBLIC_APP_URL || 'https://admin.myaisells.com',
     type: 'website',
     images: [{ url: '/xynexi.png' }],
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Xynexi - Human-AI',
     description:
-      'MYai is an advanced AI-powered platform designed to simplify complex tasks, enhance productivity, and provide intelligent solutions.',
+      'Xynexi is an advanced AI-powered platform designed to simplify complex tasks, enhance productivity, and provide intelligent solutions.',
     images: ['/xynexi.png'],
   },
   icons: {
