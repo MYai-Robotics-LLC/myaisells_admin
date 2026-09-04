@@ -1,11 +1,13 @@
+# syntax=docker/dockerfile:1
+
 # Step 1: Use an official Node.js image as the base image
 FROM node:22-alpine AS builder
 
 # Step 2: Set the working directory inside the container
 WORKDIR /app
 
-# Step 3: Copy package files to the container
-COPY package.json ./
+# Step 3: Copy package files and registry config to the container
+COPY package.json .npmrc ./
 
 ENV NEXT_PUBLIC_BASE_URL=https://demo.myairesource.us
 ENV NEXT_PUBLIC_BASE_URL_DOCS=https://prod.myairesource.us/api-docs
@@ -42,7 +44,10 @@ ENV NEXT_PUBLIC_POSTHOG_KEY=ph_test_123456
 ENV NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 
 # Step 4: Install dependencies + Tailwind native binding for Alpine (musl)
-RUN npm install && npm install @tailwindcss/oxide-linux-x64-musl
+# .npmrc reads ${NODE_AUTH_TOKEN} to auth against the @myai-robotics-llc registry
+RUN --mount=type=secret,id=node_auth_token \
+    export NODE_AUTH_TOKEN="$(cat /run/secrets/node_auth_token 2>/dev/null || true)" && \
+    npm install && npm install @tailwindcss/oxide-linux-x64-musl
 
 # Step 5: Copy the rest of the application code
 COPY . .

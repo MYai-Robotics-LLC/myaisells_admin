@@ -23,14 +23,20 @@ jobs:
         uses: ./.github/actions/setup-project
         with:
           node-version: 22.x
+          node-auth-token: ${{ secrets.NODE_AUTH_TOKEN }}
 
       # Step 4: Build the app to fail fast before building the Docker image
       - name: Build app
         run: pnpm run build
 
       - name: Build Docker image
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/myai-admin:latest .
+          docker buildx build \
+            --secret id=node_auth_token,env=NODE_AUTH_TOKEN \
+            --load \
+            -t ${{ secrets.DOCKER_USERNAME }}/myai-admin:latest .
 
       # Step 6: Log in to Docker Hub
       - name: Log in to Docker Hub

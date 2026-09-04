@@ -1,11 +1,6 @@
 name: Setup Node.js and dependencies
 description: Setup Node.js environment with pnpm dependencies
 
-on:
-  push:
-    branches:
-      - main
-
 inputs:
   node-version:
     description: Node.js version
@@ -18,6 +13,10 @@ inputs:
     description: Whether to restore Next.js build cache
     required: false
     default: 'false'
+  node-auth-token:
+    description: Token for authenticating against the @myai-robotics-llc private registry (see .npmrc)
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -43,6 +42,8 @@ runs:
     - name: Install dependencies
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.node-auth-token }}
       run: pnpm install --frozen-lockfile
 
     - name: Restore Next.js build output
