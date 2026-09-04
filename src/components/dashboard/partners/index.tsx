@@ -12,7 +12,7 @@ import {
   Pagination,
   SearchFilterBar,
   TableRowSkeleton,
-} from '@myairobotics/ui';
+} from '@myai-robotics-llc/ui';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

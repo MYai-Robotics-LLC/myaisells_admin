@@ -1,6 +1,6 @@
 'use client';
 
-import { Dropdown } from '@myairobotics/ui';
+import { Dropdown } from '@myai-robotics-llc/ui';
 import { FiBell, FiCheck } from 'react-icons/fi';
 import {
   useGetNotificationsQuery,

@@ -12,7 +12,7 @@ import {
   SearchFilterBar,
   StatCard,
   TableRowSkeleton,
-} from '@myairobotics/ui';
+} from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -154,19 +154,22 @@ export default function BusinessesManagement() {
             label="Phone"
             id="phone"
             placeholder="+1 555 0100"
-            {...register('phone')}
+            error={errors.phone?.message}
+            {...register('phone', { required: 'Required' })}
           />
           <FormField
             label="Website"
             id="website"
             placeholder="https://acme.com"
-            {...register('website')}
+            error={errors.website?.message}
+            {...register('website', { required: 'Required' })}
           />
           <FormField
             label="Country"
             id="country"
             placeholder="United States"
-            {...register('country')}
+            error={errors.country?.message}
+            {...register('country', { required: 'Required' })}
           />
           <FormField
             label="Subscription Plan"
@@ -175,11 +178,28 @@ export default function BusinessesManagement() {
             {...register('subscription_plan')}
           />
           <FormField
+            label="Contact Person"
+            id="contact_person"
+            placeholder="Jane Doe"
+            error={errors.contact_person?.message}
+            {...register('contact_person', { required: 'Required' })}
+          />
+          <FormField
+            label="Business Sector ID"
+            id="business_sector_id"
+            type="number"
+            placeholder="1"
+            hint="Numeric ID from the business sectors table; there's no picker for this yet."
+            error={errors.business_sector_id?.message}
+            {...register('business_sector_id', { required: 'Required', valueAsNumber: true })}
+          />
+          <FormField
             label="Address"
             id="address"
             placeholder="123 Main St, Suite 400"
             className="sm:col-span-2"
-            {...register('address')}
+            error={errors.address?.message}
+            {...register('address', { required: 'Required' })}
           />
           <div className="flex items-center justify-end gap-3 sm:col-span-2">
             <button type="button" onClick={closeCreateModal} className="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-50">

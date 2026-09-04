@@ -60,11 +60,12 @@ export const rbacApi = baseApi.injectEndpoints({
 
     removePermissionFromRole: builder.mutation<
       RemovePermissionFromRoleResponse,
-      { roleId: string; permissionId: string }
+      { roleId: string; permissionId: string; reason: string }
     >({
-      query: ({ roleId, permissionId }) => ({
+      query: ({ roleId, permissionId, reason }) => ({
         url: `${baseUrl}/roles/${roleId}/permissions/${permissionId}`,
         method: 'DELETE',
+        body: { reason },
       }),
       invalidatesTags: ['Role'],
     }),

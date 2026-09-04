@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/actions/setup-project
         with:
           node-version: ${{ matrix.node-version }}
+          node-auth-token: ${{ secrets.GH_PACKAGES_TOKEN }}
 
       - name: Restore or cache Next.js build
         uses: actions/cache@v4
@@ -64,6 +65,7 @@ jobs:
         uses: ./.github/actions/setup-project
         with:
           node-version: ${{ matrix.node-version }}
+          node-auth-token: ${{ secrets.GH_PACKAGES_TOKEN }}
 
       - if: github.event_name == 'pull_request'
         name: Validate all commits from PR
@@ -95,6 +97,7 @@ jobs:
         uses: ./.github/actions/setup-project
         with:
           node-version: ${{ matrix.node-version }}
+          node-auth-token: ${{ secrets.GH_PACKAGES_TOKEN }}
 
       - name: Run unit tests
         uses: docker://mcr.microsoft.com/playwright:v1.56.1

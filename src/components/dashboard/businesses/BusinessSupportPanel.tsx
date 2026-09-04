@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, EmptyState, FormField, Modal, SidePanel, Skeleton } from '@myairobotics/ui';
+import { Badge, EmptyState, FormField, Modal, SidePanel, Skeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -859,6 +859,28 @@ export default function BusinessSupportPanel({ businessId, businessName, open, o
 
   return (
     <SidePanel open={open} onClose={onClose} title="Support Mode" subtitle={businessName}>
+      {/* PRD §6.6: a visible, persistent banner is required while acting on
+       * behalf of a business — this is the whole session, not just the
+       * destructive actions inside it. */}
+      <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+        <div className="flex items-center gap-2.5">
+          <FiAlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
+          <p className="text-xs font-semibold text-amber-800">
+            You are acting on behalf of
+            {' '}
+            {businessName}
+            . Actions are being recorded.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-100"
+        >
+          Exit Support Mode
+        </button>
+      </div>
+
       <div className="flex flex-wrap gap-1 border-b border-slate-100 pb-3">
         {TABS.map(({ value, label, icon: Icon }) => (
           <button

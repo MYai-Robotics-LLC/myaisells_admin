@@ -137,10 +137,11 @@ export const partnersApi = baseApi.injectEndpoints({
       providesTags: ['Partner'],
     }),
 
-    partnerSupportAccess: builder.mutation<PartnerSupportAccessResponse, string>({
-      query: partnerId => ({
-        url: `${baseUrl}/partners/${partnerId}/support-access`,
+    partnerSupportAccess: builder.mutation<PartnerSupportAccessResponse, { id: string; reason: string }>({
+      query: ({ id, reason }) => ({
+        url: `${baseUrl}/partners/${id}/support-access`,
         method: 'POST',
+        body: { reason },
       }),
       invalidatesTags: ['Partner'],
     }),

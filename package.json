@@ -5,6 +5,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "bootstrap": "bash scripts/install.sh",
     "dev": "next dev",
     "spotlight": "npx @spotlightjs/spotlight",
     "dev:spotlight": "pnpm run -r run-p dev spotlight",
@@ -22,7 +23,7 @@
   },
   "dependencies": {
     "@commitlint/types": "^20.0.0",
-    "@myairobotics/ui": "^0.13.0",
+    "@myai-robotics-llc/ui": "^0.13.10",
     "@reduxjs/toolkit": "^2.10.1",
     "@sentry/nextjs": "^10.22.0",
     "@svgr/webpack": "^8.1.0",

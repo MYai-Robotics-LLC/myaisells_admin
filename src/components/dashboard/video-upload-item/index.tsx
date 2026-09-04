@@ -1,7 +1,7 @@
 'use client';
 
 import type { VideoUploadFormWithUrls } from '@/types';
-import { Input } from '@myairobotics/ui';
+import { Input } from '@myai-robotics-llc/ui';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { FiX } from 'react-icons/fi';

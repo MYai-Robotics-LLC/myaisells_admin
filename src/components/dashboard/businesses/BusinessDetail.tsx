@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, InfoField, SectionDivider, Skeleton } from '@myairobotics/ui';
+import { Badge, InfoField, SectionDivider, Skeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiBriefcase,
@@ -17,7 +17,9 @@ import {
   FiZap,
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { ConfirmReasonModal, useConfirmReasonAction } from '@/components/global/confirm-reason-modal';
 import {
+  useBusinessSupportAccessMutation,
   useGetAdminBusinessQuery,
   useUpdateBusinessStatusMutation,
 } from '@/services';
@@ -33,6 +35,7 @@ export default function BusinessDetail({ businessId }: BusinessDetailProps) {
   const [showSupportMode, setShowSupportMode] = useState(false);
 
   const [updateStatus, { isLoading: isActing }] = useUpdateBusinessStatusMutation();
+  const [enterSupportAccess] = useBusinessSupportAccessMutation();
 
   const handleActivate = async () => {
     try {
@@ -43,23 +46,31 @@ export default function BusinessDetail({ businessId }: BusinessDetailProps) {
     }
   };
 
-  const handleSuspend = async () => {
-    try {
-      await updateStatus({ id: businessId, body: { status: 'suspended' } }).unwrap();
-      toast.success('Business suspended');
-    } catch {
-      toast.error('Failed to suspend business');
-    }
-  };
+  // PRD §15.3: account suspension and cancellation require confirmation and a logged reason.
+  const suspendAction = useConfirmReasonAction(
+    async (reason) => {
+      await updateStatus({ id: businessId, body: { status: 'suspended', reason } }).unwrap();
+    },
+    { success: 'Business suspended', error: 'Failed to suspend business' },
+  );
 
-  const handleCancel = async () => {
-    try {
-      await updateStatus({ id: businessId, body: { status: 'cancelled' } }).unwrap();
-      toast.success('Business cancelled');
-    } catch {
-      toast.error('Failed to cancel business');
-    }
-  };
+  const cancelAction = useConfirmReasonAction(
+    async (reason) => {
+      await updateStatus({ id: businessId, body: { status: 'cancelled', reason } }).unwrap();
+    },
+    { success: 'Business cancelled', error: 'Failed to cancel business' },
+  );
+
+  // PRD §6.6 / §15.3: entering support mode is a restricted action — it must
+  // be confirmed, given a reason, and recorded as its own audit event before
+  // the workspace opens (separately from the panel's own action-level logging).
+  const supportAccessAction = useConfirmReasonAction(
+    async (reason) => {
+      await enterSupportAccess({ id: businessId, reason }).unwrap();
+      setShowSupportMode(true);
+    },
+    { success: 'Support mode entered. This access has been audit-logged', error: 'Failed to enter support mode' },
+  );
 
   if (isLoading) {
     return (
@@ -175,7 +186,7 @@ export default function BusinessDetail({ businessId }: BusinessDetailProps) {
 
       <button
         type="button"
-        onClick={() => setShowSupportMode(true)}
+        onClick={supportAccessAction.open}
         className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary-200 bg-primary-50 px-4 py-2.5 text-sm font-bold text-primary-700 transition-all hover:bg-primary-100"
       >
         <FiHeadphones className="h-4 w-4" />
@@ -199,22 +210,52 @@ export default function BusinessDetail({ businessId }: BusinessDetailProps) {
         {business.isActive && (
           <button
             type="button"
-            onClick={handleSuspend}
-            disabled={isActing}
+            onClick={suspendAction.open}
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-amber-600 disabled:opacity-50"
           >
-            {isActing ? 'Suspending…' : 'Suspend'}
+            Suspend
           </button>
         )}
         <button
           type="button"
-          onClick={handleCancel}
-          disabled={isActing}
+          onClick={cancelAction.open}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-bold text-red-600 transition-all hover:bg-red-100 disabled:opacity-50"
         >
-          {isActing ? 'Cancelling…' : 'Cancel Account'}
+          Cancel Account
         </button>
       </div>
+
+      <ConfirmReasonModal
+        open={suspendAction.isOpen}
+        title="Suspend this business?"
+        description="The business loses access immediately. This is audit-logged and reversible by reactivating the account."
+        confirmLabel="Suspend"
+        confirmingLabel="Suspending…"
+        isLoading={suspendAction.isLoading}
+        onClose={suspendAction.close}
+        onConfirm={suspendAction.confirm}
+      />
+      <ConfirmReasonModal
+        open={cancelAction.isOpen}
+        title="Cancel this account?"
+        description="This cancels the business's subscription and access. This is audit-logged."
+        confirmLabel="Cancel Account"
+        confirmingLabel="Cancelling…"
+        isLoading={cancelAction.isLoading}
+        onClose={cancelAction.close}
+        onConfirm={cancelAction.confirm}
+      />
+      <ConfirmReasonModal
+        open={supportAccessAction.isOpen}
+        title={`Enter support mode for ${business.name}?`}
+        description="You'll be acting on behalf of this business. All actions taken in support mode are recorded against this session."
+        confirmLabel="Enter Support Mode"
+        confirmingLabel="Entering…"
+        variant="default"
+        isLoading={supportAccessAction.isLoading}
+        onClose={supportAccessAction.close}
+        onConfirm={supportAccessAction.confirm}
+      />
 
       <BusinessSupportPanel
         businessId={businessId}

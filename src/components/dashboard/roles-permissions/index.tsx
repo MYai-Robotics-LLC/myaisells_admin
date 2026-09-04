@@ -1,7 +1,7 @@
 'use client';
 
 import type { Permission, Role } from '@/types';
-import { Badge, FormField, PageHeader, Skeleton } from '@myairobotics/ui';
+import { Badge, FormField, PageHeader, Skeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -18,6 +18,7 @@ import {
   FiZap,
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { ConfirmReasonModal, useConfirmReasonAction } from '@/components/global/confirm-reason-modal';
 import {
   useAddPermissionsToRoleMutation,
   useCreatePermissionMutation,
@@ -69,11 +70,12 @@ function RoleCard({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [addPermissions, { isLoading: isAdding }] = useAddPermissionsToRoleMutation();
-  const [removePermission, { isLoading: isRemoving }] = useRemovePermissionFromRoleMutation();
+  const [removePermission] = useRemovePermissionFromRoleMutation();
 
   const assignedIds = new Set(role.permissions.map(p => p.id));
   const unassigned = allPermissions.filter(p => !assignedIds.has(p.id));
   const [selected, setSelected] = useState<string[]>([]);
+  const [pendingRemoval, setPendingRemoval] = useState<{ id: string; name: string } | null>(null);
 
   const toggleSelect = (id: string) => {
     setSelected(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
@@ -92,14 +94,16 @@ function RoleCard({
     }
   };
 
-  const handleRemove = async (permissionId: string, permissionName: string) => {
-    try {
-      await removePermission({ roleId: role.id, permissionId }).unwrap();
-      toast.success(`"${permissionName}" removed from ${role.label}`);
-    } catch {
-      toast.error('Failed to remove permission');
-    }
-  };
+  // PRD §15.3: permission changes require confirmation and a logged reason.
+  const removeAction = useConfirmReasonAction(
+    async (reason) => {
+      if (!pendingRemoval) {
+        return;
+      }
+      await removePermission({ roleId: role.id, permissionId: pendingRemoval.id, reason }).unwrap();
+    },
+    { success: `"${pendingRemoval?.name ?? 'Permission'}" removed from ${role.label}`, error: 'Failed to remove permission' },
+  );
 
   const poolColor: Record<string, string> = {
     admin: 'from-blue-500 to-blue-700',
@@ -167,8 +171,10 @@ function RoleCard({
                           {role.isEditable && (
                             <button
                               type="button"
-                              onClick={() => handleRemove(p.id, p.name)}
-                              disabled={isRemoving}
+                              onClick={() => {
+                                setPendingRemoval({ id: p.id, name: p.name });
+                                removeAction.open();
+                              }}
                               title={`Remove "${p.name}"`}
                               className="ml-0.5 rounded p-0.5 text-slate-300 transition-all hover:bg-red-100 hover:text-red-500 disabled:opacity-40"
                             >
@@ -223,6 +229,20 @@ function RoleCard({
           </div>
         )}
       </div>
+
+      <ConfirmReasonModal
+        open={removeAction.isOpen}
+        title={`Remove "${pendingRemoval?.name ?? ''}"?`}
+        description={`This revokes the permission from ${role.label} immediately and is audit-logged.`}
+        confirmLabel="Remove"
+        confirmingLabel="Removing…"
+        isLoading={removeAction.isLoading}
+        onClose={() => {
+          removeAction.close();
+          setPendingRemoval(null);
+        }}
+        onConfirm={removeAction.confirm}
+      />
     </div>
   );
 }
@@ -463,8 +483,9 @@ export default function RolesPermissions() {
                             {!p.isSystem && (
                               <button
                                 type="button"
-                                className="ml-3 shrink-0 rounded-lg p-1.5 text-slate-300 transition-all hover:bg-red-50 hover:text-red-500"
-                                title="Delete permission"
+                                disabled
+                                className="ml-3 shrink-0 cursor-not-allowed rounded-lg p-1.5 text-slate-200"
+                                title="Not yet supported by the API — permissions can be removed from a role, but there's no endpoint to delete a permission outright yet"
                               >
                                 <FiTrash2 className="h-3.5 w-3.5" />
                               </button>

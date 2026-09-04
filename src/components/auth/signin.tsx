@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, FormField } from '@myairobotics/ui';
+import { Button, FormField } from '@myai-robotics-llc/ui';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

@@ -14,10 +14,6 @@ const config: KnipConfig = {
   ],
   // Dependencies to ignore during analysis
   ignoreDependencies: [
-    // MUI's default style engine needs these at runtime even though no
-    // app code imports them directly.
-    '@emotion/react',
-    '@emotion/styled',
     // Used by the webpack loader config in next.config.ts, which Knip
     // doesn't statically analyze.
     '@svgr/webpack',

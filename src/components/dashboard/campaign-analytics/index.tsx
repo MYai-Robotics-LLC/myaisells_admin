@@ -1,6 +1,6 @@
 'use client';
 
-import { PageHeader, StatCardSkeleton } from '@myairobotics/ui';
+import { PageHeader, StatCardSkeleton } from '@myai-robotics-llc/ui';
 import { AgCharts } from 'ag-charts-react';
 import { useMemo } from 'react';
 import { PiChartLine, PiUsers } from 'react-icons/pi';

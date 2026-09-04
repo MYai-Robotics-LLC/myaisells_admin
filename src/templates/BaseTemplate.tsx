@@ -1,11 +1,11 @@
 'use client';
 
-import type { NavSection } from '@myairobotics/ui';
+import type { NavSection } from '@myai-robotics-llc/ui';
 import {
   DashboardHeader,
   DashboardSidebarContent,
   LogoutConfirmDialog,
-} from '@myairobotics/ui';
+} from '@myai-robotics-llc/ui';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';

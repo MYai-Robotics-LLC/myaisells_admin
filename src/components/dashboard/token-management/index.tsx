@@ -1,7 +1,7 @@
 'use client';
 
 import type { TokenAllocation, TokenTransaction, TokenTransactionType } from '@/types';
-import { EmptyState, PageHeader, Pagination, SearchFilterBar, SidePanel, StatCard, TableRowSkeleton } from '@myairobotics/ui';
+import { EmptyState, PageHeader, Pagination, SearchFilterBar, SidePanel, StatCard, TableRowSkeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import {
   FiArrowDownLeft,

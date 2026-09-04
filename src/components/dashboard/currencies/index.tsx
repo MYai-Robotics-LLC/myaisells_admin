@@ -7,7 +7,7 @@ import {
   Modal,
   PageHeader,
   TableRowSkeleton,
-} from '@myairobotics/ui';
+} from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiAlertTriangle, FiDollarSign, FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';

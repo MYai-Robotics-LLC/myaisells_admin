@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, EmptyState, StatCardSkeleton, StatCard as UiStatCard } from '@myairobotics/ui';
+import { Badge, EmptyState, StatCardSkeleton, StatCard as UiStatCard } from '@myai-robotics-llc/ui';
 import {
   FiActivity,
   FiAlertTriangle,
@@ -8,8 +8,10 @@ import {
   FiBriefcase,
   FiCalendar,
   FiCreditCard,
+  FiDollarSign,
   FiGlobe,
   FiHeadphones,
+  FiPauseCircle,
   FiTrendingDown,
   FiTrendingUp,
   FiUser,
@@ -21,6 +23,7 @@ import {
   useGetDashboardGrowthQuery,
   useGetDashboardLeaderboardsQuery,
   useGetDashboardOverviewQuery,
+  useGetDashboardSummaryQuery,
   useGetDashboardSupportActivityQuery,
 } from '@/services';
 
@@ -68,11 +71,13 @@ function StatCard({ label, value, icon, color, sub }: StatCardProps) {
 
 export default function MetricsDashboard() {
   const { data, isLoading } = useGetDashboardOverviewQuery();
+  const { data: summaryData, isLoading: summaryLoading } = useGetDashboardSummaryQuery();
   const { data: leaderboardsData, isLoading: leaderboardsLoading } = useGetDashboardLeaderboardsQuery();
   const { data: growthData, isLoading: growthLoading } = useGetDashboardGrowthQuery();
   const { data: supportData, isLoading: supportLoading } = useGetDashboardSupportActivityQuery();
 
   const overview = data?.data;
+  const summary = summaryData?.data;
   const leaderboards = leaderboardsData?.data;
   const growth = growthData?.data;
   const support = supportData?.data;
@@ -138,6 +143,73 @@ export default function MetricsDashboard() {
                         <StatCard key={s.label} {...s} />
                       ))}
                     </div>
+                  </div>
+
+                  {/* Revenue & Tokens */}
+                  <div>
+                    <h2 className="mb-3 text-xs font-bold tracking-widest text-slate-400 uppercase">Revenue & Tokens</h2>
+                    {summaryLoading
+                      ? (
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            {Array.from({ length: 4 }, (_, i) => `summary-skel-${i}`).map(key => <StatCardSkeleton key={key} />)}
+                          </div>
+                        )
+                      : (
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            <UiStatCard
+                              label="Total Revenue"
+                              value={`$${(summary?.subscriptions.totalRevenue ?? 0).toLocaleString()}`}
+                              icon={<FiDollarSign />}
+                              iconBg="bg-emerald-100 text-emerald-600"
+                              valueColor="text-emerald-700"
+                            />
+                            <UiStatCard
+                              label="Active Businesses"
+                              value={summary?.businesses.active ?? 0}
+                              icon={<FiUserCheck />}
+                              iconBg="bg-primary-100 text-primary-600"
+                              valueColor="text-primary-700"
+                            />
+                            <UiStatCard
+                              label="Suspended Businesses"
+                              value={summary?.businesses.suspended ?? 0}
+                              icon={<FiPauseCircle />}
+                              iconBg="bg-amber-100 text-amber-600"
+                              valueColor="text-amber-700"
+                            />
+                            <UiStatCard
+                              label="Token Wallet Balance"
+                              value={(summary?.tokenUsage.currentWalletBalance ?? 0).toLocaleString()}
+                              icon={<FiZap />}
+                              iconBg="bg-indigo-100 text-indigo-600"
+                              valueColor="text-indigo-700"
+                            />
+                          </div>
+                        )}
+                    {!summaryLoading && summary && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Badge className="bg-slate-100 text-slate-600">
+                          {summary.subscriptions.activeSubscriptions}
+                          {' '}
+                          active subscriptions
+                        </Badge>
+                        <Badge className="bg-slate-100 text-slate-600">
+                          {summary.subscriptions.cancelledSubscriptions}
+                          {' '}
+                          cancelled subscriptions
+                        </Badge>
+                        <Badge className="bg-slate-100 text-slate-600">
+                          {summary.tokenUsage.totalTokensUsed.toLocaleString()}
+                          {' '}
+                          tokens used
+                        </Badge>
+                        <Badge className="bg-slate-100 text-slate-600">
+                          {summary.tokenUsage.totalTokensCredited.toLocaleString()}
+                          {' '}
+                          tokens credited
+                        </Badge>
+                      </div>
+                    )}
                   </div>
 
                   {/* Growth & Retention */}

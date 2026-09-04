@@ -8,21 +8,26 @@ const FEATURES = [
   { icon: FiBarChart2, label: 'Deep analytics across all business accounts' },
 ];
 
+// Uses the light (white) Xynexi wordmark on the dark brand panel — the
+// default xynexi.png's navy-to-cyan gradient is unreadable there.
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex h-screen w-full overflow-hidden">
 
-      {/* Left brand panel (desktop only) */}
-      <aside className="relative hidden flex-col overflow-hidden bg-linear-to-br from-primary-900 via-primary-800 to-primary-700 lg:flex lg:w-[480px] xl:w-[540px]">
+      {/* Left brand panel (desktop only). Fixed to the viewport height so it
+      never grows past it and never scrolls with the form on the right;
+      overflow-y-auto is a safety net in case its own content ever runs
+      taller than a short viewport. */}
+      <aside className="relative hidden h-full flex-col overflow-x-hidden overflow-y-auto bg-linear-to-br from-primary-900 via-primary-800 to-primary-700 lg:flex lg:w-120 xl:w-135">
 
         {/* Decorative geometry */}
-        <div className="absolute -top-40 -left-40 h-[560px] w-[560px] rounded-full bg-white/4" />
-        <div className="absolute top-1/3 -right-24 h-72 w-72 rounded-full bg-primary-500/25 blur-3xl" />
-        <div className="absolute -bottom-40 -left-20 h-[480px] w-[480px] rounded-full bg-primary-600/20 blur-2xl" />
+        <div className="absolute -top-40 -left-40 size-140 rounded-full bg-white/4" />
+        <div className="absolute top-1/3 -right-24 size-72 rounded-full bg-primary-500/25 blur-3xl" />
+        <div className="absolute -bottom-40 -left-20 size-120 rounded-full bg-primary-600/20 blur-2xl" />
 
         {/* Dot grid overlay */}
         <div
-          className="absolute inset-0 opacity-[0.07]"
+          className="opacity-0.07 absolute inset-0"
           style={{
             backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
             backgroundSize: '28px 28px',
@@ -33,7 +38,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="relative z-10 p-10">
           <Link href="/" className="inline-flex">
             <Image
-              src="/xynexi.png"
+              src="/xynexi-light.png"
               alt="Xynexi"
               width={677}
               height={369}
@@ -85,7 +90,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </aside>
 
       {/* Right form panel */}
-      <main className="flex flex-1 flex-col bg-snowBlue">
+      <main className="flex h-full flex-1 flex-col overflow-hidden bg-snowBlue">
 
         {/* Mobile header */}
         <div className="flex items-center border-b border-slate-100 bg-white px-6 py-4 lg:hidden">
@@ -101,9 +106,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </Link>
         </div>
 
-        {/* Centered form */}
-        <div className="flex flex-1 items-center justify-center px-5 py-12">
-          {children}
+        {/* Form content — top-anchored (not vertically centered) so short
+        steps read as an intentional page instead of a small card floating
+        in a sea of whitespace; naturally scrolls instead of clipping when
+        content is taller than the viewport, since there's no centering to
+        fight. */}
+        <div className="flex flex-1 justify-center overflow-y-auto px-5 py-12 md:py-16">
+          <div className="flex w-full items-center justify-center">
+            {children}
+          </div>
         </div>
       </main>
 

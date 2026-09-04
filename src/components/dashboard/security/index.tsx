@@ -1,7 +1,7 @@
 'use client';
 
 import type { ConfirmTwoFactorRequest, DisableTwoFactorRequest, SecuritySession } from '@/types';
-import { Badge, FormField, Modal, PageHeader, SectionDivider, Skeleton } from '@myairobotics/ui';
+import { Badge, FormField, Modal, PageHeader, SectionDivider, Skeleton } from '@myai-robotics-llc/ui';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

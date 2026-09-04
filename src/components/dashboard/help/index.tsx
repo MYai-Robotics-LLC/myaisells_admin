@@ -1,13 +1,15 @@
 'use client';
 
 import type { HowToItem } from '@/types';
-import { EmptyState, PageHeader, Pagination } from '@myairobotics/ui';
+import { EmptyState, PageHeader, Pagination } from '@myai-robotics-llc/ui';
+import Link from 'next/link';
 import { useState } from 'react';
 import {
   FiBookOpen,
   FiClock,
   FiFilm,
   FiPlay,
+  FiPlus,
   FiRefreshCw,
   FiSearch,
   FiX,
@@ -172,15 +174,24 @@ export default function HelpCenter() {
         subtitle="Video tutorials and how-to guides for platform users"
         icon={<FiBookOpen />}
         actions={(
-          <button
-            type="button"
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className="flex items-center gap-2 rounded-xl border border-white/30 bg-white/15 px-4 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/25 disabled:opacity-60"
-          >
-            <FiRefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
-            Refresh
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="flex items-center gap-2 rounded-xl border border-white/30 bg-white/15 px-4 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/25 disabled:opacity-60"
+            >
+              <FiRefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+            <Link
+              href="/upload"
+              className="flex items-center gap-2 rounded-xl border border-white/30 bg-white px-4 py-2.5 text-sm font-bold text-primary-600 shadow-sm transition-all hover:bg-white/90"
+            >
+              <FiPlus className="h-4 w-4" />
+              Upload Video
+            </Link>
+          </div>
         )}
       />
 

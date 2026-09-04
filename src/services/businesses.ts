@@ -50,11 +50,35 @@ export const businessesApi = baseApi.injectEndpoints({
     }),
 
     createBusinessOnboarding: builder.mutation<CreateBusinessOnboardingResponse, CreateBusinessRequest>({
-      query: body => ({
-        url: `${baseUrl}/business-onboarding`,
-        method: 'POST',
-        body,
-      }),
+      query: ({ name, email, phone, website, country, address, subscription_plan, business_sector_id, contact_person }) => {
+        const [contactFirstName, ...contactRest] = (contact_person ?? '').trim().split(/\s+/);
+        return {
+          url: `${baseUrl}/business-onboarding`,
+          method: 'POST',
+          // The backend validates nested business_profile and contact
+          // objects, not the flat shape this form used to send. Discovered
+          // live, one required field at a time, via a sequence of 400s.
+          body: {
+            name,
+            subscription_plan,
+            business_profile: {
+              name,
+              business_email: email,
+              phone,
+              website,
+              country,
+              address,
+              business_sector_id,
+            },
+            contact: {
+              first_name: contactFirstName || contact_person,
+              last_name: contactRest.join(' ') || contactFirstName,
+              phone,
+              email,
+            },
+          },
+        };
+      },
       invalidatesTags: ['Business'],
     }),
 
@@ -67,10 +91,11 @@ export const businessesApi = baseApi.injectEndpoints({
       invalidatesTags: ['Business'],
     }),
 
-    businessSupportAccess: builder.mutation<BusinessSupportAccessResponse, string>({
-      query: id => ({
+    businessSupportAccess: builder.mutation<BusinessSupportAccessResponse, { id: string; reason: string }>({
+      query: ({ id, reason }) => ({
         url: `${baseUrl}/businesses/${id}/support-access`,
         method: 'POST',
+        body: { reason },
       }),
       invalidatesTags: ['Business'],
     }),

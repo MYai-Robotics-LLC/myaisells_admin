@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, EmptyState, PageHeader, SearchFilterBar, TableRowSkeleton } from '@myairobotics/ui';
+import { Badge, EmptyState, PageHeader, SearchFilterBar, TableRowSkeleton } from '@myai-robotics-llc/ui';
 import { useState } from 'react';
 import { FiCheckCircle, FiDollarSign, FiXCircle } from 'react-icons/fi';
 import { PiCreditCard, PiCurrencyDollar } from 'react-icons/pi';
